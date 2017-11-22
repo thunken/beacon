@@ -7,9 +7,22 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Enumerated type for BEACON meta fields.
+ * <p>
+ * Note: the current Javadoc for this project is incomplete. We rely on
+ * <a href="https://projectlombok.org/" target="_top">Lombok</a> to generate boilerplate code, and Lombok does not plug
+ * into Javadoc. Generated methods and constructors are not included, and the Javadoc for other methods and constructors
+ * may be incomplete. See <a href="https://projectlombok.org/features/delombok" target="_top">delombok</a> and
+ * <a href="https://github.com/thunken/beacon/issues/1" target="_top">beacon#1</a> for more information.
+ *
+ * @see BeaconMetaField.Type
+ * @see BeaconMetaFields
+ * @see <a href="https://gbv.github.io/beaconspec/beacon.html#meta-fields"
+ *      target="_top">https://gbv.github.io/beaconspec/beacon.html#meta-fields</a>
+ */
 @Getter
 @RequiredArgsConstructor
-// https://gbv.github.io/beaconspec/beacon.html#meta-fields
 public enum BeaconMetaField {
 
 	ANNOTATION(Type.LINK_CONSTRUCTION, false),
@@ -44,10 +57,29 @@ public enum BeaconMetaField {
 		this(type, repeatable, DEFAULT_META_VALUE);
 	}
 
+	/**
+	 * Returns an immutable singleton set containing the default value for this meta field.
+	 *
+	 * @return an immutable singleton set containing the default value for this meta field.
+	 */
 	public Set<String> getDefaultValues() {
 		return Collections.singleton(defaultValue);
 	}
 
+	/**
+	 * Enumerated type for BEACON meta field types.
+	 * <p>
+	 * Note: the current Javadoc for this project is incomplete. We rely on
+	 * <a href="https://projectlombok.org/" target="_top">Lombok</a> to generate boilerplate code, and Lombok does not
+	 * plug into Javadoc. Generated methods and constructors are not included, and the Javadoc for other methods and
+	 * constructors may be incomplete. See
+	 * <a href="https://projectlombok.org/features/delombok" target="_top">delombok</a> and
+	 * <a href="https://github.com/thunken/beacon/issues/1" target="_top">beacon#1</a> for more information.
+	 *
+	 * @see BeaconMetaField
+	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#meta-fields"
+	 *      target="_top">https://gbv.github.io/beaconspec/beacon.html#meta-fields</a>
+	 */
 	public enum Type {
 
 		LINK_CONSTRUCTION,

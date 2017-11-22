@@ -9,6 +9,23 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Main class for BEACON links. Link elements in BEACON format are given in abbreviated form of link tokens. Each link
+ * is constructed from a mandatory source token, an optional annotation token, and an optional target token.
+ * <p>
+ * Link construction rules are based on the value of link construction {@link BeaconMetaFields}.
+ * <p>
+ * Note: the current Javadoc for this project is incomplete. We rely on
+ * <a href="https://projectlombok.org/" target="_top">Lombok</a> to generate boilerplate code, and Lombok does not plug
+ * into Javadoc. Generated methods and constructors are not included, and the Javadoc for other methods and constructors
+ * may be incomplete. See <a href="https://projectlombok.org/features/delombok" target="_top">delombok</a> and
+ * <a href="https://github.com/thunken/beacon/issues/1" target="_top">beacon#1</a> for more information.
+ *
+ * @see BeaconMetaField
+ * @see BeaconParser
+ * @see <a href="https://gbv.github.io/beaconspec/beacon.html#link-construction"
+ *      target="_top">https://gbv.github.io/beaconspec/beacon.html#link-construction</a>
+ */
 @Getter
 @RequiredArgsConstructor
 public final class BeaconLink {
@@ -24,21 +41,43 @@ public final class BeaconLink {
 	@NonNull
 	private final BeaconMetaFields metaFields;
 
+	/**
+	 * Returns this link's annotation. The annotation is constructed from the annotation token, if given, or from the
+	 * {@link BeaconMetaField#MESSAGE} meta field otherwise.
+	 *
+	 * @return This link's annotation.
+	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#link-construction"
+	 *      target="_top">https://gbv.github.io/beaconspec/beacon.html#link-construction</a>
+	 */
 	public String getAnnotation() {
-		// https://gbv.github.io/beaconspec/beacon.html#link-construction
 		return Optional.ofNullable(annotationToken).orElse(metaFields.getValue(BeaconMetaField.ANNOTATION));
 	}
 
+	/**
+	 * Returns this link's source identifier. The source identifier is constructed from the
+	 * {@link BeaconMetaField#PREFIX} meta field URI pattern by inserting the source token.
+	 *
+	 * @return This link's source identifier.
+	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#link-construction"
+	 *      target="_top">https://gbv.github.io/beaconspec/beacon.html#link-construction</a>
+	 */
 	public URI getSourceIdentifier() {
 		return get(BeaconMetaField.PREFIX, sourceToken);
 	}
 
+	/**
+	 * Returns this link's target identifier. The target identifier is constructed from the
+	 * {@link BeaconMetaField#TARGET} meta field URI pattern by inserting the target token.
+	 *
+	 * @return This link's target identifier.
+	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#link-construction"
+	 *      target="_top">https://gbv.github.io/beaconspec/beacon.html#link-construction</a>
+	 */
 	public URI getTargetIdentifier() {
 		return get(BeaconMetaField.TARGET, targetToken);
 	}
 
 	private URI get(@NonNull final BeaconMetaField metaField, @NonNull final String token) {
-		// https://gbv.github.io/beaconspec/beacon.html#link-construction
 		return URI.create(UriTemplate.fromTemplate(metaFields.getValue(metaField)).set("ID", token).expand());
 	}
 
