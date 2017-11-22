@@ -2,9 +2,10 @@
 
 `beacon` provides Java utilities for BEACON, a data interchange format for large numbers of uniform links.
 
-## BEACON Specification
+## Documentation
 
-See https://gbv.github.io/beaconspec/beacon.html.
+* Javadoc: https://thunken.github.io/beacon/
+* BEACON specification: https://gbv.github.io/beaconspec/beacon.html
 
 ## Related projects
 
