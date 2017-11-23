@@ -30,6 +30,7 @@ And then add the dependency:
 ## Documentation
 
 * Javadoc: https://thunken.github.io/beacon/
+  * Note: the current Javadoc for this project is incomplete. We rely on [Lombok](https://projectlombok.org/) to generate boilerplate code, and Lombok does not plug into Javadoc. Generated methods and constructors are not included, and the Javadoc for other methods and constructors may be incomplete. See [delombok](https://projectlombok.org/features/delombok) and [beacon#1](https://github.com/thunken/beacon/issues/1) for more information.
 * BEACON specification: https://gbv.github.io/beaconspec/beacon.html
 
 ## Related projects
