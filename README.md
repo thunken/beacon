@@ -6,7 +6,7 @@
 
 [![Release](https://jitpack.io/v/thunken/beacon.svg?style=flat-square)](https://github.com/thunken/beacon/releases)
 
-To add a dependency on this project using Gradle, Maven, sbt, or Leiningen, we recommend using [JitPack](https://jitpack.io/#thunken/beacon/v1.0.1). The Maven group ID is `com.github.thunken`, and the artifact ID is `beacon`.
+To add a dependency on this project using Gradle, Maven, sbt, or Leiningen, we recommend using [JitPack](https://jitpack.io/#thunken/beacon/v1.0.2). The Maven group ID is `com.github.thunken`, and the artifact ID is `beacon`.
 
 For example, for Maven, first add the JitPack repository to your build file:
 ```xml
@@ -23,7 +23,7 @@ And then add the dependency:
 	<dependency>
 	    <groupId>com.github.thunken</groupId>
 	    <artifactId>beacon</artifactId>
-	    <version>v1.0.1</version>
+	    <version>v1.0.2</version>
 	</dependency>
 ```
 
