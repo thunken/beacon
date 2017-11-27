@@ -36,7 +36,7 @@ public enum BeaconMetaField {
 	MESSAGE(Type.LINK_CONSTRUCTION, false),
 	NAME(Type.TARGET_DATASET, true),
 	PREFIX(Type.LINK_CONSTRUCTION, false, BeaconParser.RESERVED_EXPANSION),
-	RELATION(Type.LINK_CONSTRUCTION, false, "rdfs:seeAlso"),
+	RELATION(Type.LINK_CONSTRUCTION, false, "http://www.w3.org/2000/01/rdf-schema#seeAlso"),
 	SOURCESET(Type.SOURCE_DATASET, false),
 	TARGET(Type.LINK_CONSTRUCTION, false, BeaconParser.RESERVED_EXPANSION),
 	TARGETSET(Type.TARGET_DATASET, false),
