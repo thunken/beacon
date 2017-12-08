@@ -25,8 +25,9 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>3.0.0-M1</version>
 				<configuration>
-					<reportOutputDirectory>${project.basedir}</reportOutputDirectory>
 					<destDir>docs</destDir>
+					<notimestamp>true</notimestamp>
+					<reportOutputDirectory>${project.basedir}</reportOutputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
