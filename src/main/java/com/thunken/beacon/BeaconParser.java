@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.text.Normalizer;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,7 +19,6 @@ import java.util.regex.Pattern;
 import com.damnhandy.uri.template.Expression;
 import com.damnhandy.uri.template.MalformedUriTemplateException;
 import com.damnhandy.uri.template.UriTemplate;
-import com.google.common.collect.ImmutableSet;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -46,7 +48,8 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 	private static final Pattern METALINE = Pattern.compile("#([A-Z]+)[:\\h]\\h*(.*)$");
 
 	// https://gbv.github.io/beaconspec/beacon.html#uri-patterns
-	private static final ImmutableSet<String> VALID_EXPRESSIONS = ImmutableSet.of(RESERVED_EXPANSION, SIMPLE_EXPANSION);
+	private static final List<String> VALID_EXPRESSIONS = Collections
+			.unmodifiableList(Arrays.asList(RESERVED_EXPANSION, SIMPLE_EXPANSION));
 
 	// Broader than https://gbv.github.io/beaconspec/beacon.html#whitespace-normalization
 	private static final Pattern WHITESPACE = Pattern.compile("\\h+");

@@ -25,45 +25,56 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum BeaconMetaField {
 
-	ANNOTATION(Type.LINK_CONSTRUCTION, false),
-	CONTACT(Type.LINK_DUMP, true),
-	CREATOR(Type.LINK_DUMP, true),
-	DESCRIPTION(Type.LINK_DUMP, true),
-	FEED(Type.LINK_DUMP, true),
-	FORMAT(Type.LINK_DUMP, true, "BEACON"),
-	HOMEPAGE(Type.LINK_DUMP, true),
-	INSTITUTION(Type.TARGET_DATASET, true),
-	MESSAGE(Type.LINK_CONSTRUCTION, false),
-	NAME(Type.TARGET_DATASET, true),
-	PREFIX(Type.LINK_CONSTRUCTION, false, BeaconParser.RESERVED_EXPANSION),
-	RELATION(Type.LINK_CONSTRUCTION, false, "http://www.w3.org/2000/01/rdf-schema#seeAlso"),
-	SOURCESET(Type.SOURCE_DATASET, false),
-	TARGET(Type.LINK_CONSTRUCTION, false, BeaconParser.RESERVED_EXPANSION),
-	TARGETSET(Type.TARGET_DATASET, false),
-	TIMESTAMP(Type.LINK_DUMP, true),
-	UPDATE(Type.LINK_DUMP, false);
+	ANNOTATION(Type.LINK_CONSTRUCTION),
+	CONTACT(Type.LINK_DUMP),
+	CREATOR(Type.LINK_DUMP),
+	DESCRIPTION(Type.LINK_DUMP),
+	FEED(Type.LINK_DUMP),
+	FORMAT(Type.LINK_DUMP, "BEACON"),
+	HOMEPAGE(Type.LINK_DUMP),
+	INSTITUTION(Type.TARGET_DATASET),
+	MESSAGE(Type.LINK_CONSTRUCTION),
+	NAME(Type.TARGET_DATASET),
+	PREFIX(Type.LINK_CONSTRUCTION, BeaconParser.RESERVED_EXPANSION),
+	RELATION(Type.LINK_CONSTRUCTION, "http://www.w3.org/2000/01/rdf-schema#seeAlso"),
+	SOURCESET(Type.SOURCE_DATASET),
+	TARGET(Type.LINK_CONSTRUCTION, BeaconParser.RESERVED_EXPANSION),
+	TARGETSET(Type.TARGET_DATASET),
+	TIMESTAMP(Type.LINK_DUMP),
+	UPDATE(Type.LINK_DUMP);
 
 	public static final String DEFAULT_META_VALUE = "";
 
 	@NonNull
 	private final Type type;
 
-	private final boolean repeatable;
-
 	@NonNull
 	private final String defaultValue;
 
-	private BeaconMetaField(@NonNull final Type type, final boolean repeatable) {
-		this(type, repeatable, DEFAULT_META_VALUE);
+	private BeaconMetaField(@NonNull final Type type) {
+		this(type, DEFAULT_META_VALUE);
 	}
 
 	/**
 	 * Returns an immutable singleton set containing the default value for this meta field.
 	 *
 	 * @return an immutable singleton set containing the default value for this meta field.
+	 * @deprecated
 	 */
+	@Deprecated
 	public Set<String> getDefaultValues() {
 		return Collections.singleton(defaultValue);
+	}
+
+	/**
+	 * Returns {@code true} is this meta field is repeatable.
+	 *
+	 * @return {@code false}
+	 * @deprecated Meta fields are not repeatable anymore, so this method always returns {@code false}.
+	 */
+	@Deprecated
+	public boolean isRepeatable() {
+		return false;
 	}
 
 	/**

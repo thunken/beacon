@@ -1,11 +1,9 @@
 package com.thunken.beacon;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.SetMultimap;
 
 import lombok.NonNull;
 
@@ -26,7 +24,7 @@ import lombok.NonNull;
  */
 public final class BeaconMetaFields {
 
-	private final SetMultimap<BeaconMetaField, String> fields = HashMultimap.create();
+	private final Map<BeaconMetaField, String> fields = new HashMap<>();
 
 	/**
 	 * Returns the value to which the specified field is mapped.
@@ -38,7 +36,7 @@ public final class BeaconMetaFields {
 	 *             If {@code field} is null.
 	 */
 	public String getValue(@NonNull final BeaconMetaField field) {
-		return Iterables.getOnlyElement(getValues(field));
+		return fields.getOrDefault(field, field.getDefaultValue());
 	}
 
 	/**
@@ -47,9 +45,13 @@ public final class BeaconMetaFields {
 	 * @return All values to which the specified field is mapped.
 	 * @throws NullPointerException
 	 *             If {@code field} is null.
+	 * @deprecated Meta fields are not repeatable anymore, so this method returns an immutable set containing the only
+	 *             value to which the specified field is mapped.
+	 * @see BeaconMetaFields#getValue(BeaconMetaField)
 	 */
+	@Deprecated
 	public Set<String> getValues(@NonNull final BeaconMetaField field) {
-		return fields.containsKey(field) ? fields.get(field) : field.getDefaultValues();
+		return Collections.singleton(getValue(field));
 	}
 
 	/**
@@ -60,15 +62,11 @@ public final class BeaconMetaFields {
 	 *             If {@code field} is null.
 	 */
 	public boolean isDefault(@NonNull final BeaconMetaField field) {
-		return fields.containsKey(field) ? fields.get(field).equals(field.getDefaultValues()) : true;
+		return fields.containsKey(field) ? fields.get(field).equals(field.getDefaultValue()) : true;
 	}
 
 	void put(@NonNull final BeaconMetaField field, @NonNull final String value) {
-		if (field.isRepeatable()) {
-			fields.put(field, value);
-		} else {
-			fields.replaceValues(field, Collections.singleton(value));
-		}
+		fields.put(field, value);
 	}
 
 }
