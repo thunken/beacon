@@ -54,6 +54,19 @@ public final class BeaconLink {
 	}
 
 	/**
+	 * Returns this link's relation type. The relation type is set to the {@link BeaconMetaField#RELATION} meta field if
+	 * this field contains an URI. If this field contains an URI pattern, the relation type is constructed from this
+	 * pattern by inserting the annotation token or the empty string if no annotation token is given.
+	 *
+	 * @return This link's relation type.
+	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#link-construction"
+	 *      target="_top">https://gbv.github.io/beaconspec/beacon.html#link-construction</a>
+	 */
+	public URI getRelationType() {
+		return get(BeaconMetaField.RELATION, Optional.ofNullable(annotationToken).orElse(""));
+	}
+
+	/**
 	 * Returns this link's source identifier. The source identifier is constructed from the
 	 * {@link BeaconMetaField#PREFIX} meta field URI pattern by inserting the source token.
 	 *
