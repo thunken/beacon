@@ -6,17 +6,19 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.text.Normalizer;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.damnhandy.uri.template.Expression;
 import com.damnhandy.uri.template.MalformedUriTemplateException;
 import com.damnhandy.uri.template.UriTemplate;
-import com.google.common.collect.ImmutableSet;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -39,14 +41,15 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 
 	static final String RESERVED_EXPANSION = "{+ID}", SIMPLE_EXPANSION = "{ID}";
 
+	// https://gbv.github.io/beaconspec/beacon.html#uri-patterns
+	static final List<String> VALID_EXPRESSIONS = Collections
+			.unmodifiableList(Arrays.asList(RESERVED_EXPANSION, SIMPLE_EXPANSION));
+
 	private static final String DEFAULT_ANNOTATION = "";
 
 	private static final Pattern HTTPX = Pattern.compile("^https?:", Pattern.CASE_INSENSITIVE);
 
 	private static final Pattern METALINE = Pattern.compile("#([A-Z]+)[:\\h]\\h*(.*)$");
-
-	// https://gbv.github.io/beaconspec/beacon.html#uri-patterns
-	private static final ImmutableSet<String> VALID_EXPRESSIONS = ImmutableSet.of(RESERVED_EXPANSION, SIMPLE_EXPANSION);
 
 	// Broader than https://gbv.github.io/beaconspec/beacon.html#whitespace-normalization
 	private static final Pattern WHITESPACE = Pattern.compile("\\h+");
@@ -69,6 +72,8 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 	 *
 	 * @param reader
 	 *            A character stream reader.
+	 * @throws BeaconFormatException
+	 *             If the parser encounters data that violates the BEACON specification.
 	 * @throws IOException
 	 *             If an I/O error occurs.
 	 * @throws NullPointerException
@@ -80,6 +85,7 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 		bufferedReader = reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
 		// https://gbv.github.io/beaconspec/beacon.html#beacon-format
 		// Parse meta lines
+		final Set<BeaconMetaField> seen = EnumSet.noneOf(BeaconMetaField.class);
 		while (readLine() != null && line.startsWith("#")) {
 			final Matcher matcher = METALINE.matcher(line);
 			if (!matcher.matches()) {
@@ -92,13 +98,13 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 				// TODO warn
 				continue;
 			}
+			if (seen.contains(metaField)) {
+				// TODO warn
+			}
 			String metaValue = normalize(matcher.group(2), BeaconMetaField.DEFAULT_META_VALUE);
 			switch (metaField) {
 			case FORMAT:
 				if (getLineNo() != 1) {
-					// TODO warn
-				}
-				if (!Objects.equals(metaValue, BeaconMetaField.FORMAT.getDefaultValue())) {
 					// TODO warn
 				}
 				break;
@@ -110,6 +116,7 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 				break;
 			}
 			metaFields.put(metaField, metaValue);
+			seen.add(metaField);
 		}
 		// Discard empty lines
 		while (line != null && normalize(line, null) == null) {
@@ -250,17 +257,13 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 		if (templateString == null || templateString.isEmpty()) {
 			return RESERVED_EXPANSION;
 		}
-		final Expression[] expressions = UriTemplate.fromTemplate(templateString).getExpressions();
-		if (expressions.length == 0) {
-			return templateString + SIMPLE_EXPANSION;
+		final UriTemplate template;
+		try {
+			template = UriTemplate.fromTemplate(templateString);
+		} catch (final MalformedUriTemplateException e) {
+			throw new BeaconFormatException(e);
 		}
-		for (final Expression expression : expressions) {
-			if (!VALID_EXPRESSIONS.contains(expression.getValue())) {
-				throw new MalformedUriTemplateException("Invalid template expression " + expression.getValue(),
-						expression.getStartPosition());
-			}
-		}
-		return templateString;
+		return template.expressionCount() == 0 ? templateString + SIMPLE_EXPANSION : templateString;
 	}
 
 	private static String[] tokenize(@NonNull final String string) {

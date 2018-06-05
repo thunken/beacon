@@ -25,8 +25,9 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>3.0.0-M1</version>
 				<configuration>
-					<reportOutputDirectory>${project.basedir}</reportOutputDirectory>
 					<destDir>docs</destDir>
+					<notimestamp>true</notimestamp>
+					<reportOutputDirectory>${project.basedir}</reportOutputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -36,11 +37,6 @@
 			<groupId>com.damnhandy</groupId>
 			<artifactId>handy-uri-templates</artifactId>
 			<version>2.1.6</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>23.4-jre</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
