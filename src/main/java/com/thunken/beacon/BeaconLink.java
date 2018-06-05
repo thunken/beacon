@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.damnhandy.uri.template.UriTemplate;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
  * @see <a href="https://gbv.github.io/beaconspec/beacon.html#link-construction"
  *      target="_top">https://gbv.github.io/beaconspec/beacon.html#link-construction</a>
  */
+@EqualsAndHashCode
 @Getter
 @RequiredArgsConstructor
 public final class BeaconLink {

@@ -1,10 +1,13 @@
 package com.thunken.beacon;
 
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 /**
@@ -22,9 +25,10 @@ import lombok.NonNull;
  *
  * @see BeaconMetaField
  */
+@EqualsAndHashCode
 public final class BeaconMetaFields {
 
-	private final Map<BeaconMetaField, String> fields = new HashMap<>();
+	private final Map<BeaconMetaField, String> fields = new EnumMap<>(BeaconMetaField.class);
 
 	/**
 	 * Returns the value to which the specified field is mapped.
@@ -65,8 +69,19 @@ public final class BeaconMetaFields {
 		return fields.containsKey(field) ? fields.get(field).equals(field.getDefaultValue()) : true;
 	}
 
+	@Override
+	public String toString() {
+		return Arrays.stream(BeaconMetaField.values()).map(field -> (field + "=" + getValue(field)))
+				.collect(Collectors.joining(", ", "{", "}"));
+	}
+
 	void put(@NonNull final BeaconMetaField field, @NonNull final String value) {
-		fields.put(field, value);
+		if (!field.test(value)) {
+			throw new BeaconFormatException(field, value);
+		}
+		if (!value.equals(field.getDefaultValue())) {
+			fields.put(field, value);
+		}
 	}
 
 }
