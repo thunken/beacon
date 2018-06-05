@@ -215,7 +215,7 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 			annotation = DEFAULT_ANNOTATION;
 			break;
 		case 2:
-			if (metaFields.isDefault(BeaconMetaField.TARGET) && HTTPX.matcher(tokens[1]).find()) {
+			if (metaFields.isDefault(BeaconMetaField.TARGET) && tokens[1] != null && HTTPX.matcher(tokens[1]).find()) {
 				source = tokens[0];
 				annotation = DEFAULT_ANNOTATION;
 				target = tokens[1];
