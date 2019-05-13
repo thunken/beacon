@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
@@ -26,9 +27,18 @@ import lombok.NonNull;
  * @see BeaconMetaField
  */
 @EqualsAndHashCode
+@NoArgsConstructor
 public final class BeaconMetaFields {
 
 	private final Map<BeaconMetaField, String> fields = new EnumMap<>(BeaconMetaField.class);
+
+	public BeaconMetaFields(@NonNull final BeaconMetaFields metaFields) {
+		putAll(metaFields);
+	}
+
+	public BeaconMetaFields(@NonNull final Map<BeaconMetaField, String> map) {
+		putAll(map);
+	}
 
 	/**
 	 * Returns the value to which the specified field is mapped.
@@ -81,6 +91,16 @@ public final class BeaconMetaFields {
 		}
 		if (!value.equals(field.getDefaultValue())) {
 			fields.put(field, value);
+		}
+	}
+
+	void putAll(@NonNull final BeaconMetaFields metaFields) {
+		fields.putAll(metaFields.fields);
+	}
+
+	void putAll(@NonNull final Map<BeaconMetaField, String> map) {
+		for (final Map.Entry<BeaconMetaField, String> entry : map.entrySet()) {
+			put(entry.getKey(), entry.getValue());
 		}
 	}
 

@@ -34,8 +34,8 @@ import lombok.NonNull;
  *
  * @see BeaconLink
  * @see BeaconMetaFields
- * @see <a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format"
- *      target="_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a>
+ * @see <a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format" target=
+ *      "_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a>
  */
 public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 
@@ -78,11 +78,33 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 	 *             If an I/O error occurs.
 	 * @throws NullPointerException
 	 *             If {@code reader} is null.
-	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format"
-	 *      target="_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a>
+	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format" target=
+	 *      "_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a>
 	 */
 	public BeaconParser(@NonNull final Reader reader) throws IOException {
+		this(reader, new BeaconMetaFields());
+	}
+
+	/**
+	 * Creates a BEACON parser that uses the specified {@link Reader} and default {@link BeaconMetaFields}, and further
+	 * initializes the parser's {@link BeaconMetaFields} from the meta lines.
+	 *
+	 * @param reader
+	 *            A character stream reader.
+	 * @param defaults
+	 *            Default values for BEACON meta fields. Overwritten by meta fields parsed from the reader, if any.
+	 * @throws BeaconFormatException
+	 *             If the parser encounters data that violates the BEACON specification.
+	 * @throws IOException
+	 *             If an I/O error occurs.
+	 * @throws NullPointerException
+	 *             If {@code reader} is null.
+	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format" target=
+	 *      "_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a>
+	 */
+	public BeaconParser(@NonNull final Reader reader, @NonNull final BeaconMetaFields defaults) throws IOException {
 		bufferedReader = reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
+		metaFields.putAll(defaults);
 		// https://gbv.github.io/beaconspec/beacon.html#beacon-format
 		// Parse meta lines
 		final Set<BeaconMetaField> seen = EnumSet.noneOf(BeaconMetaField.class);
@@ -207,10 +229,10 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 	 *         line cannot be parsed into a valid link
 	 * @throws NullPointerException
 	 *             If {@code linkLine} or {@code metaFields} is null.
-	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#links"
-	 *      target="_top">https://gbv.github.io/beaconspec/beacon.html#links</a>
-	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#link-construction"
-	 *      target="_top">https://gbv.github.io/beaconspec/beacon.html#link-construction</a>
+	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#links" target=
+	 *      "_top">https://gbv.github.io/beaconspec/beacon.html#links</a>
+	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#link-construction" target=
+	 *      "_top">https://gbv.github.io/beaconspec/beacon.html#link-construction</a>
 	 */
 	public static Optional<BeaconLink> parseLine(@NonNull final String linkLine,
 			@NonNull final BeaconMetaFields metaFields) {

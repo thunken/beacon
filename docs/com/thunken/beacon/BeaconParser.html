@@ -126,8 +126,8 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Closeable.h
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/thunken/beacon/BeaconLink.html" title="class in com.thunken.beacon"><code>BeaconLink</code></a>, 
 <a href="../../../com/thunken/beacon/BeaconMetaFields.html" title="class in com.thunken.beacon"><code>BeaconMetaFields</code></a>, 
-<a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format"
-      target="_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a></dd>
+<a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format" target=
+      "_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a></dd>
 </dl>
 </li>
 </ul>
@@ -150,6 +150,13 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Closeable.h
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../com/thunken/beacon/BeaconParser.html#BeaconParser-java.io.Reader-">BeaconParser</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a>&nbsp;reader)</code>
 <div class="block">Creates a BEACON parser that uses the specified <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io"><code>Reader</code></a>, and initializes the parser's
  <a href="../../../com/thunken/beacon/BeaconMetaFields.html" title="class in com.thunken.beacon"><code>BeaconMetaFields</code></a> from the meta lines.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/thunken/beacon/BeaconParser.html#BeaconParser-java.io.Reader-com.thunken.beacon.BeaconMetaFields-">BeaconParser</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a>&nbsp;reader,
+            <a href="../../../com/thunken/beacon/BeaconMetaFields.html" title="class in com.thunken.beacon">BeaconMetaFields</a>&nbsp;defaults)</code>
+<div class="block">Creates a BEACON parser that uses the specified <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io"><code>Reader</code></a> and default <a href="../../../com/thunken/beacon/BeaconMetaFields.html" title="class in com.thunken.beacon"><code>BeaconMetaFields</code></a>, and further
+ initializes the parser's <a href="../../../com/thunken/beacon/BeaconMetaFields.html" title="class in com.thunken.beacon"><code>BeaconMetaFields</code></a> from the meta lines.</div>
 </td>
 </tr>
 </table>
@@ -236,7 +243,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Closeable.h
 <a name="BeaconParser-java.io.Reader-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>BeaconParser</h4>
 <pre>public&nbsp;BeaconParser(@NonNull
@@ -252,8 +259,35 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Closeable.h
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If an I/O error occurs.</dd>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang">NullPointerException</a></code> - If <code>reader</code> is null.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format"
-      target="_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a></dd>
+<dd><a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format" target=
+      "_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a></dd>
+</dl>
+</li>
+</ul>
+<a name="BeaconParser-java.io.Reader-com.thunken.beacon.BeaconMetaFields-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>BeaconParser</h4>
+<pre>public&nbsp;BeaconParser(@NonNull
+                    <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a>&nbsp;reader,
+                    @NonNull
+                    <a href="../../../com/thunken/beacon/BeaconMetaFields.html" title="class in com.thunken.beacon">BeaconMetaFields</a>&nbsp;defaults)
+             throws <a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Creates a BEACON parser that uses the specified <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io"><code>Reader</code></a> and default <a href="../../../com/thunken/beacon/BeaconMetaFields.html" title="class in com.thunken.beacon"><code>BeaconMetaFields</code></a>, and further
+ initializes the parser's <a href="../../../com/thunken/beacon/BeaconMetaFields.html" title="class in com.thunken.beacon"><code>BeaconMetaFields</code></a> from the meta lines.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>reader</code> - A character stream reader.</dd>
+<dd><code>defaults</code> - Default values for BEACON meta fields. Overwritten by meta fields parsed from the reader, if any.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../../com/thunken/beacon/BeaconFormatException.html" title="class in com.thunken.beacon">BeaconFormatException</a></code> - If the parser encounters data that violates the BEACON specification.</dd>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If an I/O error occurs.</dd>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang">NullPointerException</a></code> - If <code>reader</code> is null.</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format" target=
+      "_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a></dd>
 </dl>
 </li>
 </ul>
@@ -374,10 +408,10 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Closeable.h
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang">NullPointerException</a></code> - If <code>linkLine</code> or <code>metaFields</code> is null.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="https://gbv.github.io/beaconspec/beacon.html#links"
-      target="_top">https://gbv.github.io/beaconspec/beacon.html#links</a>, 
-<a href="https://gbv.github.io/beaconspec/beacon.html#link-construction"
-      target="_top">https://gbv.github.io/beaconspec/beacon.html#link-construction</a></dd>
+<dd><a href="https://gbv.github.io/beaconspec/beacon.html#links" target=
+      "_top">https://gbv.github.io/beaconspec/beacon.html#links</a>, 
+<a href="https://gbv.github.io/beaconspec/beacon.html#link-construction" target=
+      "_top">https://gbv.github.io/beaconspec/beacon.html#link-construction</a></dd>
 </dl>
 </li>
 </ul>
@@ -449,6 +483,6 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Closeable.h
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2018. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2019. All rights reserved.</small></p>
 </body>
 </html>
