@@ -3,8 +3,8 @@ package com.thunken.beacon;
 /**
  * Thrown to indicate that a method has been passed data that violates the BEACON specification.
  *
- * @see <a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format"
- *      target="_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a>
+ * @see <a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format" target=
+ *      "_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a>
  */
 public class BeaconFormatException extends RuntimeException {
 

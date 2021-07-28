@@ -16,10 +16,6 @@ import com.damnhandy.uri.template.Expression;
 import com.damnhandy.uri.template.MalformedUriTemplateException;
 import com.damnhandy.uri.template.UriTemplate;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
 /**
  * Enumerated type for BEACON meta fields.
  * <p>
@@ -31,11 +27,9 @@ import lombok.RequiredArgsConstructor;
  *
  * @see BeaconMetaField.Type
  * @see BeaconMetaFields
- * @see <a href="https://gbv.github.io/beaconspec/beacon.html#meta-fields"
- *      target="_top">https://gbv.github.io/beaconspec/beacon.html#meta-fields</a>
+ * @see <a href="https://gbv.github.io/beaconspec/beacon.html#meta-fields" target=
+ *      "_top">https://gbv.github.io/beaconspec/beacon.html#meta-fields</a>
  */
-@Getter
-@RequiredArgsConstructor
 public enum BeaconMetaField implements Predicate<String> {
 
 	ANNOTATION(Type.LINK_CONSTRUCTION, ValueType.URI),
@@ -58,17 +52,24 @@ public enum BeaconMetaField implements Predicate<String> {
 
 	public static final String DEFAULT_META_VALUE = "";
 
-	@NonNull
-	private final Type type;
-
-	@NonNull
 	private final String defaultValue;
 
-	@NonNull
+	private final Type type;
+
 	private final ValueType valueType;
 
-	private BeaconMetaField(@NonNull final Type type, @NonNull final ValueType valueType) {
+	BeaconMetaField(final Type type, final String defaultValue, final ValueType valueType) {
+		this.type = Objects.requireNonNull(type, "type is null");
+		this.defaultValue = Objects.requireNonNull(defaultValue, "defaultValue is null");
+		this.valueType = Objects.requireNonNull(valueType, "valueType is null");
+	}
+
+	BeaconMetaField(final Type type, final ValueType valueType) {
 		this(type, DEFAULT_META_VALUE, valueType);
+	}
+
+	public String getDefaultValue() {
+		return defaultValue;
 	}
 
 	/**
@@ -80,6 +81,14 @@ public enum BeaconMetaField implements Predicate<String> {
 	@Deprecated
 	public Set<String> getDefaultValues() {
 		return Collections.singleton(defaultValue);
+	}
+
+	public Type getType() {
+		return type;
+	}
+
+	public ValueType getValueType() {
+		return valueType;
 	}
 
 	/**
@@ -98,6 +107,17 @@ public enum BeaconMetaField implements Predicate<String> {
 		return valueType.test(value);
 	}
 
+	private static boolean test(final String value, final DateTimeFormatter formatter) {
+		Objects.requireNonNull(value, "value is value");
+		Objects.requireNonNull(formatter, "formatter is null");
+		try {
+			formatter.parse(value);
+		} catch (final DateTimeParseException e) {
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Enumerated type for BEACON meta field types.
 	 * <p>
@@ -109,8 +129,8 @@ public enum BeaconMetaField implements Predicate<String> {
 	 * <a href="https://github.com/thunken/beacon/issues/1" target="_top">beacon#1</a> for more information.
 	 *
 	 * @see BeaconMetaField
-	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#meta-fields"
-	 *      target="_top">https://gbv.github.io/beaconspec/beacon.html#meta-fields</a>
+	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#meta-fields" target=
+	 *      "_top">https://gbv.github.io/beaconspec/beacon.html#meta-fields</a>
 	 */
 	public enum Type {
 
@@ -198,15 +218,6 @@ public enum BeaconMetaField implements Predicate<String> {
 			}
 		};
 
-	}
-
-	private static boolean test(@NonNull final String value, @NonNull final DateTimeFormatter formatter) {
-		try {
-			formatter.parse(value);
-		} catch (final DateTimeParseException e) {
-			return false;
-		}
-		return true;
 	}
 
 }

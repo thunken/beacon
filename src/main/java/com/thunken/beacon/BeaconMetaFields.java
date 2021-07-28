@@ -4,12 +4,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 /**
  * Custom collection to hold multiple BEACON meta fields and their respective values.
@@ -26,18 +23,31 @@ import lombok.NonNull;
  *
  * @see BeaconMetaField
  */
-@EqualsAndHashCode
-@NoArgsConstructor
 public final class BeaconMetaFields {
 
 	private final Map<BeaconMetaField, String> fields = new EnumMap<>(BeaconMetaField.class);
 
-	public BeaconMetaFields(@NonNull final BeaconMetaFields metaFields) {
+	public BeaconMetaFields() {
+		/* NO OP */
+	}
+
+	public BeaconMetaFields(final BeaconMetaFields metaFields) {
 		putAll(metaFields);
 	}
 
-	public BeaconMetaFields(@NonNull final Map<BeaconMetaField, String> map) {
+	public BeaconMetaFields(final Map<BeaconMetaField, String> map) {
 		putAll(map);
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object instanceof BeaconMetaFields) {
+			return fields.equals(((BeaconMetaFields) object).fields);
+		}
+		return false;
 	}
 
 	/**
@@ -49,7 +59,8 @@ public final class BeaconMetaFields {
 	 * @throws NullPointerException
 	 *             If {@code field} is null.
 	 */
-	public String getValue(@NonNull final BeaconMetaField field) {
+	public String getValue(final BeaconMetaField field) {
+		Objects.requireNonNull(field, "field is null");
 		return fields.getOrDefault(field, field.getDefaultValue());
 	}
 
@@ -64,8 +75,14 @@ public final class BeaconMetaFields {
 	 * @see BeaconMetaFields#getValue(BeaconMetaField)
 	 */
 	@Deprecated
-	public Set<String> getValues(@NonNull final BeaconMetaField field) {
+	public Set<String> getValues(final BeaconMetaField field) {
+		Objects.requireNonNull(field, "field is null");
 		return Collections.singleton(getValue(field));
+	}
+
+	@Override
+	public int hashCode() {
+		return fields.hashCode();
 	}
 
 	/**
@@ -75,7 +92,8 @@ public final class BeaconMetaFields {
 	 * @throws NullPointerException
 	 *             If {@code field} is null.
 	 */
-	public boolean isDefault(@NonNull final BeaconMetaField field) {
+	public boolean isDefault(final BeaconMetaField field) {
+		Objects.requireNonNull(field, "field is null");
 		return fields.containsKey(field) ? fields.get(field).equals(field.getDefaultValue()) : true;
 	}
 
@@ -85,7 +103,9 @@ public final class BeaconMetaFields {
 				.collect(Collectors.joining(", ", "{", "}"));
 	}
 
-	void put(@NonNull final BeaconMetaField field, @NonNull final String value) {
+	void put(final BeaconMetaField field, final String value) {
+		Objects.requireNonNull(field, "field is null");
+		Objects.requireNonNull(value, "value is null");
 		if (!field.test(value)) {
 			throw new BeaconFormatException(field, value);
 		}
@@ -94,11 +114,13 @@ public final class BeaconMetaFields {
 		}
 	}
 
-	void putAll(@NonNull final BeaconMetaFields metaFields) {
+	void putAll(final BeaconMetaFields metaFields) {
+		Objects.requireNonNull(metaFields, "metaFields is null");
 		fields.putAll(metaFields.fields);
 	}
 
-	void putAll(@NonNull final Map<BeaconMetaField, String> map) {
+	void putAll(final Map<BeaconMetaField, String> map) {
+		Objects.requireNonNull(map, "map is null");
 		for (final Map.Entry<BeaconMetaField, String> entry : map.entrySet()) {
 			put(entry.getKey(), entry.getValue());
 		}

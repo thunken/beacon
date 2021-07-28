@@ -12,6 +12,7 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -19,9 +20,6 @@ import java.util.regex.Pattern;
 
 import com.damnhandy.uri.template.MalformedUriTemplateException;
 import com.damnhandy.uri.template.UriTemplate;
-
-import lombok.Getter;
-import lombok.NonNull;
 
 /**
  * Main class to parse BEACON dumps.
@@ -58,10 +56,8 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 
 	private String line;
 
-	@Getter
 	private int lineNo;
 
-	@Getter
 	private final BeaconMetaFields metaFields = new BeaconMetaFields();
 
 	private final int offset;
@@ -81,7 +77,7 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format" target=
 	 *      "_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a>
 	 */
-	public BeaconParser(@NonNull final Reader reader) throws IOException {
+	public BeaconParser(final Reader reader) throws IOException {
 		this(reader, new BeaconMetaFields());
 	}
 
@@ -102,7 +98,9 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#beacon-format" target=
 	 *      "_top">https://gbv.github.io/beaconspec/beacon.html#beacon-format</a>
 	 */
-	public BeaconParser(@NonNull final Reader reader, @NonNull final BeaconMetaFields defaults) throws IOException {
+	public BeaconParser(final Reader reader, final BeaconMetaFields defaults) throws IOException {
+		Objects.requireNonNull(reader, "reader is null");
+		Objects.requireNonNull(defaults, "defaults is null");
 		bufferedReader = reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
 		metaFields.putAll(defaults);
 		// https://gbv.github.io/beaconspec/beacon.html#beacon-format
@@ -156,6 +154,10 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 		line = null;
 	}
 
+	public int getLineNo() {
+		return lineNo;
+	}
+
 	/**
 	 * Returns the current link number.
 	 *
@@ -163,6 +165,10 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 	 */
 	public int getLinkNo() {
 		return getLineNo() - offset;
+	}
+
+	public BeaconMetaFields getMetaFields() {
+		return metaFields;
 	}
 
 	/**
@@ -234,8 +240,9 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 	 * @see <a href="https://gbv.github.io/beaconspec/beacon.html#link-construction" target=
 	 *      "_top">https://gbv.github.io/beaconspec/beacon.html#link-construction</a>
 	 */
-	public static Optional<BeaconLink> parseLine(@NonNull final String linkLine,
-			@NonNull final BeaconMetaFields metaFields) {
+	public static Optional<BeaconLink> parseLine(final String linkLine, final BeaconMetaFields metaFields) {
+		Objects.requireNonNull(linkLine, "linkLine is null");
+		Objects.requireNonNull(metaFields, "metaFields is null");
 		final String[] tokens = tokenize(linkLine);
 		final String source, annotation, target;
 		switch (tokens.length) {
@@ -288,7 +295,8 @@ public class BeaconParser implements Closeable, Iterator<Optional<BeaconLink>> {
 		return template.expressionCount() == 0 ? templateString + SIMPLE_EXPANSION : templateString;
 	}
 
-	private static String[] tokenize(@NonNull final String string) {
+	private static String[] tokenize(final String string) {
+		Objects.requireNonNull(string, "string is null");
 		// https://gbv.github.io/beaconspec/beacon.html#beacon-format
 		// https://gbv.github.io/beaconspec/beacon.html#links
 		final String[] tokens = string.split("\\|", -1);
